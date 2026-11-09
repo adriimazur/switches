@@ -1,0 +1,735 @@
+/* The Switches Overview illustration. The look maps the kit's tokens to the
+   docs site's (apps/docs/app/(site)/site.css) and draws the sheet with the
+   real panel's measures and palette (packages/switches/src/panel/styles.ts). */
+
+.so .ss-stage {
+  overflow: hidden;
+  /* The page is the ground */
+  background: transparent;
+  border-radius: 12px;
+  /* The site's neutrals, as light-dark() pairs: the scheme comes from the
+     site (its OS-following default or a forced Mode pick, site.css) */
+  --ss-canvas: light-dark(#fdfdfc, #111111);
+  --ss-surface: light-dark(#ffffff, #161616);
+  --ss-chrome: light-dark(#fafaf9, #1a1a1a);
+  --ss-line: light-dark(#eaeae8, #2a2a29);
+  --ss-text-strong: light-dark(#1b1b1a, #f0f0ee);
+  --ss-text: light-dark(#646463, #a2a2a0);
+  --ss-text-faint: light-dark(#8a8a87, #8c8c8a);
+  --ss-ink-1: light-dark(#f4f4f2, #1d1d1c);
+  --ss-ink-2: light-dark(#ececea, #232322);
+  --ss-ink-3: light-dark(#e3e3e0, #2a2a29);
+  --ss-ink-4: light-dark(#d6d6d2, #343433);
+  --ss-ink-5: light-dark(#c4c4bf, #444443);
+  --ss-font: var(--s-font-sans, ui-sans-serif), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ss-radius-window: 12px;
+  --ss-line-strong: light-dark(#d9d9d6, #353534);
+  /* The real panel's palette */
+  --so-bg: light-dark(#f6f5f1, #1f1f1e);
+  --so-ink: light-dark(#0f0f0e, #f2f1ee);
+  --so-muted: light-dark(#5f5e5a, #908f8a);
+  --so-line: light-dark(#e2e0da, #2e2e2c);
+  --so-line-strong: light-dark(#c9c6be, #3c3c39);
+  --so-accent: #ff4b14;
+  --so-pic: light-dark(#ecebe6, #222221);
+  --so-cta: light-dark(#1b1b1a, #e8e8e6);
+  letter-spacing: -0.01em;
+}
+
+/* Browsers without light-dark() (see the fallback at the end of site.css):
+   the same pairs spelled out. Checked by e2e/css-fallback.spec.ts. */
+@supports not (color: light-dark(#000, #fff)) {
+  .so .ss-stage {
+    --ss-canvas: #fdfdfc;
+    --ss-surface: #ffffff;
+    --ss-chrome: #fafaf9;
+    --ss-line: #eaeae8;
+    --ss-text-strong: #1b1b1a;
+    --ss-text: #646463;
+    --ss-text-faint: #8a8a87;
+    --ss-ink-1: #f4f4f2;
+    --ss-ink-2: #ececea;
+    --ss-ink-3: #e3e3e0;
+    --ss-ink-4: #d6d6d2;
+    --ss-ink-5: #c4c4bf;
+    --ss-line-strong: #d9d9d6;
+    --so-bg: #f6f5f1;
+    --so-ink: #0f0f0e;
+    --so-muted: #5f5e5a;
+    --so-line: #e2e0da;
+    --so-line-strong: #c9c6be;
+    --so-pic: #ecebe6;
+    --so-cta: #1b1b1a;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]) .so .ss-stage {
+      --ss-canvas: #111111;
+      --ss-surface: #161616;
+      --ss-chrome: #1a1a1a;
+      --ss-line: #2a2a29;
+      --ss-text-strong: #f0f0ee;
+      --ss-text: #a2a2a0;
+      --ss-text-faint: #8c8c8a;
+      --ss-ink-1: #1d1d1c;
+      --ss-ink-2: #232322;
+      --ss-ink-3: #2a2a29;
+      --ss-ink-4: #343433;
+      --ss-ink-5: #444443;
+      --ss-line-strong: #353534;
+      --so-bg: #1f1f1e;
+      --so-ink: #f2f1ee;
+      --so-muted: #908f8a;
+      --so-line: #2e2e2c;
+      --so-line-strong: #3c3c39;
+      --so-pic: #222221;
+      --so-cta: #e8e8e6;
+    }
+  }
+
+  html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]) .so .ss-stage {
+    --ss-canvas: #111111;
+    --ss-surface: #161616;
+    --ss-chrome: #1a1a1a;
+    --ss-line: #2a2a29;
+    --ss-text-strong: #f0f0ee;
+    --ss-text: #a2a2a0;
+    --ss-text-faint: #8c8c8a;
+    --ss-ink-1: #1d1d1c;
+    --ss-ink-2: #232322;
+    --ss-ink-3: #2a2a29;
+    --ss-ink-4: #343433;
+    --ss-ink-5: #444443;
+    --ss-line-strong: #353534;
+    --so-bg: #1f1f1e;
+    --so-ink: #f2f1ee;
+    --so-muted: #908f8a;
+    --so-line: #2e2e2c;
+    --so-line-strong: #3c3c39;
+    --so-pic: #222221;
+    --so-cta: #e8e8e6;
+  }
+}
+
+/* The preview site fills the stage: the window is the frame, its edge a
+   hairline drawn over the page */
+.so .so-win {
+  position: absolute;
+  inset: 0;
+  box-shadow: none;
+}
+
+.so .so-win::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--ss-line-strong, #d9d9d6);
+  pointer-events: none;
+}
+
+.so .so-win .ss-window__url {
+  flex: 0 1 220px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.so .so-page {
+  position: relative;
+  height: 100%;
+  background: var(--ss-surface);
+}
+
+.so .so-nav {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.so .so-links {
+  display: flex;
+  gap: 12px;
+}
+
+/* ---- the sections with versions ---- */
+
+.so .so-hero {
+  position: absolute;
+  top: 46px;
+  left: 316px;
+  width: 228px;
+  height: 124px;
+}
+
+.so .so-v {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.45s cubic-bezier(0.25, 0.8, 0.25, 1), translate 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.so .so-hero-a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.so .so-hero-b {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.so .so-split-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.so .so-pic {
+  height: 124px;
+  border-radius: 10px;
+  background: var(--so-pic);
+}
+
+.so .so-cta {
+  display: block;
+  width: 60px;
+  height: 20px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--so-cta);
+}
+
+.so .so-pricing {
+  position: absolute;
+  top: 192px;
+  left: 316px;
+  width: 228px;
+  bottom: 0;
+}
+
+.so .so-pricing-title {
+  display: block;
+  margin: 0 auto;
+}
+
+.so .so-pricing .so-v {
+  top: 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+}
+
+.so .so-card {
+  flex: 0 0 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px var(--ss-line);
+}
+
+.so .so-card[data-featured] {
+  box-shadow: inset 0 0 0 1.5px var(--ss-text-strong);
+}
+
+.so .so-plan-b .so-card {
+  flex-basis: 132px;
+  align-items: center;
+}
+
+.so .so-card-cta {
+  width: 100%;
+  margin-top: 4px;
+  height: 18px;
+}
+
+/* Version 0 shows the first child, version 1 the second */
+.so [data-version='0'] > .so-v:nth-of-type(2),
+.so [data-version='1'] > .so-v:nth-of-type(1) {
+  opacity: 0;
+  translate: 0 6px;
+}
+
+.so .so-pricing[data-version='0'] > .so-plan-b,
+.so .so-pricing[data-version='1'] > .so-plan-a {
+  opacity: 0;
+  translate: 0 6px;
+}
+
+.so .so-pricing[data-version='0'] > .so-plan-a,
+.so .so-pricing[data-version='1'] > .so-plan-b {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* Where the pointer waits between loops: empty page between sheet and content */
+.so .so-rest {
+  position: absolute;
+  left: 296px;
+  top: 300px;
+  width: 1px;
+  height: 1px;
+}
+
+/* ---- the Switches sheet: real measures ---- */
+
+.so .so-sheet {
+  position: absolute;
+  left: 16px;
+  top: 42px;
+  width: 268px;
+  padding: 8px;
+  border-radius: 18px;
+  border: 1px solid var(--so-line);
+  background: var(--so-bg);
+  color: var(--so-ink);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.14);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.so .so-title {
+  display: block;
+  /* The real title's 12px inset, as a margin so its box starts with its words */
+  margin: 0 12px;
+  padding: 6px 0 8px;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+  color: var(--so-muted);
+}
+
+.so .so-group {
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--so-ink) 5%, transparent);
+}
+
+.so .so-group + .so-group {
+  margin-top: 8px;
+}
+
+.so .so-item {
+  display: block;
+  padding: 10px 12px;
+}
+
+.so .so-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.so .so-label {
+  font-size: 14px;
+  line-height: 21px;
+}
+
+/* The kit's Toggle at the real switch's size: 44x26, a 22px knob */
+.so .so-switch {
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--so-ink) 16%, transparent);
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.so .so-switch[data-on] {
+  background: var(--so-accent);
+}
+
+.so .so-switch .ss-toggle__knob {
+  width: 22px;
+  height: 22px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s cubic-bezier(0.3, 1.4, 0.6, 1);
+}
+
+.so .so-switch[data-on] .ss-toggle__knob {
+  transform: translateX(18px);
+}
+
+/* The kit's Segmented with the real control's look */
+.so .so-seg {
+  margin-top: 8px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--so-ink) 8%, transparent);
+}
+
+.so .so-seg .ss-seg__thumb {
+  border-radius: 7px;
+  background: var(--so-bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.so .so-seg .ss-seg__option {
+  height: 26px;
+  padding: 0;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--so-muted);
+  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.so .so-seg .ss-seg__option[data-on] {
+  color: var(--so-ink);
+}
+
+.so .so-copy {
+  display: block;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--so-ink) 5%, transparent);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+/* The round button, open: real size and colors */
+.so .so-button {
+  position: absolute;
+  left: 16px;
+  top: 286px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--so-line-strong);
+  background: var(--so-ink);
+  color: var(--so-bg);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+/* ---- compact: the same round on a phone ----
+   The phone runs off the top (the crop falls inside the page, below the
+   status bar) and keeps a gutter at the bottom, where the panel lives. The
+   screen is laid out in true points; the Phone scales it as a whole. */
+
+.so .so-phone {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  /* A short, quiet fall: the kit's long phone shadow would be cut by the
+     stage's edge into a gray plate on a white page */
+  box-shadow: 0 14px 28px -14px rgba(0, 0, 0, 0.28);
+}
+
+.so .so-phone .so-page {
+  position: absolute;
+  inset: 0;
+}
+
+.so .so-phone .so-hero {
+  top: 240px;
+  left: 20px;
+  width: 362px;
+  height: 120px;
+}
+
+.so .so-phone .so-pic {
+  height: 120px;
+}
+
+.so .so-phone .so-hero-b {
+  grid-template-columns: 150px minmax(0, 1fr);
+}
+
+.so .so-phone .so-pricing {
+  top: 376px;
+  left: 20px;
+  width: 362px;
+  bottom: auto;
+  height: 96px;
+}
+
+.so .so-phone .so-card {
+  flex-basis: 104px;
+  padding: 12px;
+}
+
+.so .so-phone .so-card-line + .so-card-line,
+.so .so-phone .so-card-cta {
+  display: none;
+}
+
+.so .so-phone .so-plan-b .so-card {
+  flex-basis: 170px;
+}
+
+
+.so .so-phone .so-button {
+  top: 722px;
+}
+
+.so .so-phone .so-rest {
+  left: 336px;
+  top: 640px;
+}
+
+/* ---- first paint on a phone column ----
+   Before React runs (or with JavaScript off) the live stage can't know its
+   width and would draw the wide design cropped. Below the compact breakpoint
+   (a 520px column: the site's 16px gutters put that at a 552px viewport) the
+   phone still shows instead, scaled to the column (below), until the live
+   stage is ready. */
+.so-first {
+  display: none;
+}
+
+@media (max-width: 551px) {
+  .so-round:not([data-ready]) > .so-live {
+    display: none;
+  }
+  .so-round:not([data-ready]) > .so-first {
+    display: block;
+  }
+  .so-first .ss-fit {
+    zoom: 1;
+  }
+}
+
+/* The still follows the column (the viewport less the 16px gutters) the way
+   the live stage scales, in 4px steps at the narrowest width of each step
+   (down to 254px), so the swap at hydration moves the page by under 5px and
+   the still never overflows. (CSS can't yet divide a length by a length everywhere, so the
+   steps are spelled out.) */
+@media (max-width: 389px) {
+  .so-first .ss-fit {
+    zoom: 0.9888;
+  }
+}
+
+@media (max-width: 385px) {
+  .so-first .ss-fit {
+    zoom: 0.9777;
+  }
+}
+
+@media (max-width: 381px) {
+  .so-first .ss-fit {
+    zoom: 0.9665;
+  }
+}
+
+@media (max-width: 377px) {
+  .so-first .ss-fit {
+    zoom: 0.9553;
+  }
+}
+
+@media (max-width: 373px) {
+  .so-first .ss-fit {
+    zoom: 0.9441;
+  }
+}
+
+@media (max-width: 369px) {
+  .so-first .ss-fit {
+    zoom: 0.9330;
+  }
+}
+
+@media (max-width: 365px) {
+  .so-first .ss-fit {
+    zoom: 0.9218;
+  }
+}
+
+@media (max-width: 361px) {
+  .so-first .ss-fit {
+    zoom: 0.9106;
+  }
+}
+
+@media (max-width: 357px) {
+  .so-first .ss-fit {
+    zoom: 0.8994;
+  }
+}
+
+@media (max-width: 353px) {
+  .so-first .ss-fit {
+    zoom: 0.8883;
+  }
+}
+
+@media (max-width: 349px) {
+  .so-first .ss-fit {
+    zoom: 0.8771;
+  }
+}
+
+@media (max-width: 345px) {
+  .so-first .ss-fit {
+    zoom: 0.8659;
+  }
+}
+
+@media (max-width: 341px) {
+  .so-first .ss-fit {
+    zoom: 0.8547;
+  }
+}
+
+@media (max-width: 337px) {
+  .so-first .ss-fit {
+    zoom: 0.8436;
+  }
+}
+
+@media (max-width: 333px) {
+  .so-first .ss-fit {
+    zoom: 0.8324;
+  }
+}
+
+@media (max-width: 329px) {
+  .so-first .ss-fit {
+    zoom: 0.8212;
+  }
+}
+
+@media (max-width: 325px) {
+  .so-first .ss-fit {
+    zoom: 0.8101;
+  }
+}
+
+@media (max-width: 321px) {
+  .so-first .ss-fit {
+    zoom: 0.7989;
+  }
+}
+
+@media (max-width: 317px) {
+  .so-first .ss-fit {
+    zoom: 0.7877;
+  }
+}
+
+@media (max-width: 313px) {
+  .so-first .ss-fit {
+    zoom: 0.7765;
+  }
+}
+
+@media (max-width: 309px) {
+  .so-first .ss-fit {
+    zoom: 0.7654;
+  }
+}
+
+@media (max-width: 305px) {
+  .so-first .ss-fit {
+    zoom: 0.7542;
+  }
+}
+
+@media (max-width: 301px) {
+  .so-first .ss-fit {
+    zoom: 0.7430;
+  }
+}
+
+@media (max-width: 297px) {
+  .so-first .ss-fit {
+    zoom: 0.7318;
+  }
+}
+
+@media (max-width: 293px) {
+  .so-first .ss-fit {
+    zoom: 0.7207;
+  }
+}
+
+@media (max-width: 289px) {
+  .so-first .ss-fit {
+    zoom: 0.7095;
+  }
+}
+
+@media (max-width: 285px) {
+  .so-first .ss-fit {
+    zoom: 0.6983;
+  }
+}
+
+@media (max-width: 281px) {
+  .so-first .ss-fit {
+    zoom: 0.6872;
+  }
+}
+
+@media (max-width: 277px) {
+  .so-first .ss-fit {
+    zoom: 0.6760;
+  }
+}
+
+@media (max-width: 273px) {
+  .so-first .ss-fit {
+    zoom: 0.6648;
+  }
+}
+
+@media (max-width: 269px) {
+  .so-first .ss-fit {
+    zoom: 0.6536;
+  }
+}
+
+@media (max-width: 265px) {
+  .so-first .ss-fit {
+    zoom: 0.6425;
+  }
+}
+
+@media (max-width: 261px) {
+  .so-first .ss-fit {
+    zoom: 0.6313;
+  }
+}
+
+@media (max-width: 257px) {
+  .so-first .ss-fit {
+    zoom: 0.6201;
+  }
+}
+
+/* The panel's title in the phone: 12pt drawn at the phone's 0.76 scale
+   (and the stage's own 0.96 in a 375px viewport) would be 9px; at 15.5pt it
+   is 11px or more. The sheet grows 4pt, taken from the gap above it. */
+.so .so-phone .so-title {
+  font-size: 15.5px;
+  line-height: 22px;
+}
+
+.so .so-phone .so-sheet {
+  top: 474px;
+}
+
+/* Narrower than 367px the stage shrinks further (0.92 at 360, 0.8 at 320): a
+   larger title keeps it at 11px or more there; the sheet takes the extra 2pt
+   from the gap above it too. */
+@media (max-width: 366px) {
+  .so .so-phone .so-title {
+    font-size: 18.5px;
+    line-height: 24px;
+  }
+  .so .so-phone .so-sheet {
+    top: 472px;
+  }
+}

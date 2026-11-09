@@ -1,0 +1,76 @@
+{
+  "name": "switches-react",
+  "version": "0.1.0",
+  "description": "Floating panel and <Variant> wrapper to flip between versions of a page section and copy your picks as a prompt.",
+  "keywords": [
+    "react",
+    "nextjs",
+    "variants",
+    "design-review",
+    "claude-code",
+    "feedback",
+    "prototyping",
+    "ui"
+  ],
+  "author": "Andrii Mazur",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adriimazur/switches.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adriimazur/switches/issues"
+  },
+  "homepage": "https://mazur.design/switches",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "bin": {
+    "switches": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\" && tsup && node -e \"require('node:fs').copyFileSync('dist/index.d.ts','dist/index.d.cts')\"",
+    "test": "vitest run --passWithNoTests",
+    "prepack": "npm run build && npm test && node scripts/copy-docs.mjs"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.0.0",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "jsdom": "^25.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

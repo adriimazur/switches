@@ -1,0 +1,16 @@
+node_modules
+dist
+.superpowers
+.next
+.next-*
+test-results
+playwright-report
+next-env.d.ts
+*.tsbuildinfo
+.DS_Store
+coverage
+*.log
+packages/switches/README.md
+packages/switches/LICENSE
+.claude/
+skills-lock.json
