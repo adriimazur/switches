@@ -3,3 +3,6 @@ packages:
   - "apps/*"
 allowBuilds:
   esbuild: true
+overrides:
+  postcss: ">=8.5.23"
+  esbuild: ">=0.28.1"
