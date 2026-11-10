@@ -44,13 +44,15 @@ html:has(> body > .site):is([data-switches-picks="mode:dark"], [data-switches-pi
   --s-line-strong: light-dark(#d9d9d6, #353534);
   --s-sunk: light-dark(#f4f4f2, #171717);
   --s-chip: light-dark(#f0f0ee, #1f1f1e);
-  /* The accent (blue by default; see the accent picks below): links, the
-     focus ring and the current nav item's mark (--s-link, --s-mark), and a
-     fill that carries white text (--s-accent, the Try it mock's glaze). */
-  --s-link: light-dark(#1f5fd6, #7ea6ff);
-  --s-mark: light-dark(#2f6fec, #3b78f0);
-  --s-accent: light-dark(#2563eb, #2b6cf0);
-  --s-on-accent: #ffffff;
+  /* The accent (black by default; Blue and Orange are picks, below): links,
+     the focus ring and the current nav item's mark (--s-link, --s-mark), and
+     a fill that carries text (--s-accent with --s-on-accent, the Try it
+     mock's glaze and the illustration's switch). Black flips to near-white
+     in dark mode. */
+  --s-link: light-dark(#1b1b1a, #f0f0ee);
+  --s-mark: light-dark(#1b1b1a, #f0f0ee);
+  --s-accent: light-dark(#111111, #f0f0ee);
+  --s-on-accent: light-dark(#ffffff, #111111);
   --s-radius: 10px;
   --s-col: 560px;
   --s-side: 196px;
@@ -67,11 +69,12 @@ html:has(> body > .site):is([data-switches-picks="mode:dark"], [data-switches-pi
   overflow-x: clip;
 }
 
-/* Green: fill 5.02:1 with white text; links 5.85:1 (light) / 9.72:1 (dark) */
-html:is([data-switches-picks="accent:green"], [data-switches-picks^="accent:green,"], [data-switches-picks$=",accent:green"], [data-switches-picks*=",accent:green,"]) .site {
-  --s-link: light-dark(#177245, #5fcf8f);
-  --s-mark: light-dark(#15803d, #3aa86a);
-  --s-accent: #15803d;
+/* Blue: fill 5.17:1 with white text (light, #2563eb) and 4.66:1 (dark, #2b6cf0) */
+html:is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) .site {
+  --s-link: light-dark(#1f5fd6, #7ea6ff);
+  --s-mark: light-dark(#2f6fec, #3b78f0);
+  --s-accent: light-dark(#2563eb, #2b6cf0);
+  --s-on-accent: #ffffff;
 }
 
 /* Orange: fill 5.18:1 with white text; links 5.82:1 (light) / 9.02:1 (dark) */
@@ -79,10 +82,29 @@ html:is([data-switches-picks="accent:orange"], [data-switches-picks^="accent:ora
   --s-link: light-dark(#b23c0a, #ff9a5c);
   --s-mark: light-dark(#c2410c, #e0611f);
   --s-accent: #c2410c;
+  --s-on-accent: #ffffff;
 }
 
 body:has(> .site) {
   background: light-dark(#fdfdfc, #111111);
+}
+
+/* The Switches panel follows the site's mode and accent (it lives outside
+   .site, so its tokens are set here): the panel's own warm palette, light
+   and dark, chosen by color-scheme, so a forced Mode pick reaches it too. */
+html:has(> body > .site) {
+  --sw-bg: light-dark(#f6f5f1, #1a1a1a);
+  --sw-ink: light-dark(#0f0f0e, #f2f1ee);
+  --sw-muted: light-dark(#5f5e5a, #908f8a);
+  --sw-line: light-dark(#e2e0da, #282826);
+  --sw-line-strong: light-dark(#c9c6be, #3c3c39);
+  --sw-accent: light-dark(#111111, #8d8d8b);
+}
+html:has(> body > .site):is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) {
+  --sw-accent: light-dark(#2563eb, #2b6cf0);
+}
+html:has(> body > .site):is([data-switches-picks="accent:orange"], [data-switches-picks^="accent:orange,"], [data-switches-picks$=",accent:orange"], [data-switches-picks*=",accent:orange,"]) {
+  --sw-accent: #c2410c;
 }
 
 /* Animation: System (no pick, or animation:system) follows the OS (the
@@ -994,7 +1016,7 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
   z-index: 80;
   margin: 0;
   pointer-events: none;
-  color: var(--s-link);
+  color: var(--s-faint);
   transition:
     opacity 0.2s ease,
     visibility 0s linear 0s;
@@ -1204,22 +1226,39 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
     --s-line-strong: #d9d9d6;
     --s-sunk: #f4f4f2;
     --s-chip: #f0f0ee;
+    --s-link: #1b1b1a;
+    --s-mark: #1b1b1a;
+    --s-accent: #111111;
+    --s-on-accent: #ffffff;
+  }
+  html:is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) .site {
     --s-link: #1f5fd6;
     --s-mark: #2f6fec;
     --s-accent: #2563eb;
-  }
-  html:is([data-switches-picks="accent:green"], [data-switches-picks^="accent:green,"], [data-switches-picks$=",accent:green"], [data-switches-picks*=",accent:green,"]) .site {
-    --s-link: #177245;
-    --s-mark: #15803d;
-    --s-accent: #15803d;
+    --s-on-accent: #ffffff;
   }
   html:is([data-switches-picks="accent:orange"], [data-switches-picks^="accent:orange,"], [data-switches-picks$=",accent:orange"], [data-switches-picks*=",accent:orange,"]) .site {
     --s-link: #b23c0a;
     --s-mark: #c2410c;
     --s-accent: #c2410c;
+    --s-on-accent: #ffffff;
   }
   body:has(> .site) {
     background: #fdfdfc;
+  }
+  html:has(> body > .site) {
+    --sw-bg: #f6f5f1;
+    --sw-ink: #0f0f0e;
+    --sw-muted: #5f5e5a;
+    --sw-line: #e2e0da;
+    --sw-line-strong: #c9c6be;
+    --sw-accent: #111111;
+  }
+  html:has(> body > .site):is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) {
+    --sw-accent: #2563eb;
+  }
+  html:has(> body > .site):is([data-switches-picks="accent:orange"], [data-switches-picks^="accent:orange,"], [data-switches-picks$=",accent:orange"], [data-switches-picks*=",accent:orange,"]) {
+    --sw-accent: #c2410c;
   }
   .s-try {
     --kh-surface: #ffffff;
@@ -1237,22 +1276,35 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
       --s-line-strong: #353534;
       --s-sunk: #171717;
       --s-chip: #1f1f1e;
+      --s-link: #f0f0ee;
+      --s-mark: #f0f0ee;
+      --s-accent: #f0f0ee;
+      --s-on-accent: #111111;
+    }
+    html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]):is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) .site {
       --s-link: #7ea6ff;
       --s-mark: #3b78f0;
       --s-accent: #2b6cf0;
-    }
-    html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]):is([data-switches-picks="accent:green"], [data-switches-picks^="accent:green,"], [data-switches-picks$=",accent:green"], [data-switches-picks*=",accent:green,"]) .site {
-      --s-link: #5fcf8f;
-      --s-mark: #3aa86a;
-      --s-accent: #15803d;
+      --s-on-accent: #ffffff;
     }
     html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]):is([data-switches-picks="accent:orange"], [data-switches-picks^="accent:orange,"], [data-switches-picks$=",accent:orange"], [data-switches-picks*=",accent:orange,"]) .site {
       --s-link: #ff9a5c;
       --s-mark: #e0611f;
       --s-accent: #c2410c;
+      --s-on-accent: #ffffff;
     }
     html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]) body:has(> .site) {
       background: #111111;
+    }
+    html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]):has(> body > .site) {
+      --sw-bg: #1a1a1a;
+      --sw-ink: #f2f1ee;
+      --sw-muted: #908f8a;
+      --sw-line: #282826;
+      --sw-line-strong: #3c3c39;
+    }
+    html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]):not(:is([data-switches-picks*="accent:blue"], [data-switches-picks*="accent:orange"])):has(> body > .site) {
+      --sw-accent: #8d8d8b;
     }
     html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]) .s-try {
       --kh-surface: #161616;
@@ -1270,22 +1322,35 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
     --s-line-strong: #353534;
     --s-sunk: #171717;
     --s-chip: #1f1f1e;
+    --s-link: #f0f0ee;
+    --s-mark: #f0f0ee;
+    --s-accent: #f0f0ee;
+    --s-on-accent: #111111;
+  }
+  html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]):is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) .site {
     --s-link: #7ea6ff;
     --s-mark: #3b78f0;
     --s-accent: #2b6cf0;
-  }
-  html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]):is([data-switches-picks="accent:green"], [data-switches-picks^="accent:green,"], [data-switches-picks$=",accent:green"], [data-switches-picks*=",accent:green,"]) .site {
-    --s-link: #5fcf8f;
-    --s-mark: #3aa86a;
-    --s-accent: #15803d;
+    --s-on-accent: #ffffff;
   }
   html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]):is([data-switches-picks="accent:orange"], [data-switches-picks^="accent:orange,"], [data-switches-picks$=",accent:orange"], [data-switches-picks*=",accent:orange,"]) .site {
     --s-link: #ff9a5c;
     --s-mark: #e0611f;
     --s-accent: #c2410c;
+    --s-on-accent: #ffffff;
   }
   html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]) body:has(> .site) {
     background: #111111;
+  }
+  html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]):has(> body > .site) {
+    --sw-bg: #1a1a1a;
+    --sw-ink: #f2f1ee;
+    --sw-muted: #908f8a;
+    --sw-line: #282826;
+    --sw-line-strong: #3c3c39;
+  }
+  html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]):not(:is([data-switches-picks*="accent:blue"], [data-switches-picks*="accent:orange"])):has(> body > .site) {
+    --sw-accent: #8d8d8b;
   }
   html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]) .s-try {
     --kh-surface: #161616;

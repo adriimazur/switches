@@ -113,7 +113,7 @@ test("clicking the option that is already the pick scrolls without writing the p
 
 test("on a phone the picked section ends up above the open sheet", async ({ page }) => {
   // Tall enough for the whole 288px card between the top bar and the open
-  // sheet: on the site the sheet also holds the Mode, Animation and Accent
+  // sheet: on the site the sheet also holds the Mode and Accent
   // rows (about 645px tall). The 375x812 case below checks the card's top.
   await page.setViewportSize({ width: 375, height: 1080 });
   await page.goto(withBase("/"));

@@ -30,7 +30,8 @@
   --so-muted: light-dark(#5f5e5a, #908f8a);
   --so-line: light-dark(#e2e0da, #2e2e2c);
   --so-line-strong: light-dark(#c9c6be, #3c3c39);
-  --so-accent: #ff4b14;
+  /* The panel's switch takes the site accent (black by default; Blue and Orange are picks) */
+  --so-accent: var(--s-accent, #111111);
   --so-pic: light-dark(#ecebe6, #222221);
   --so-cta: light-dark(#1b1b1a, #e8e8e6);
   letter-spacing: -0.01em;
@@ -357,6 +358,8 @@
 
 .so .so-switch[data-on] .ss-toggle__knob {
   transform: translateX(18px);
+  /* White on a black or coloured track; dark on the near-white track of dark mode */
+  background: var(--s-on-accent, #fff);
 }
 
 /* The kit's Segmented with the real control's look */
@@ -386,21 +389,71 @@
   color: var(--so-ink);
 }
 
-.so .so-copy {
+.so .so-item + .so-item {
+  border-top: 1px solid var(--so-line);
+}
+
+/* Option decorations: the preset icons and the colour dots */
+.so .so-opt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.so .so-ico {
   display: block;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.so .so-dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(128, 128, 128, 0.5);
+}
+
+.so .so-dot[data-accent='black'] {
+  background: #111111;
+}
+
+.so .so-dot[data-accent='blue'] {
+  background: #2563eb;
+}
+
+.so .so-dot[data-accent='orange'] {
+  background: #ea580c;
+}
+
+/* Copy my picks: the real button is black with a copy icon on the left */
+.so .so-copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   margin-top: 8px;
   padding: 10px 12px;
   border-radius: 12px;
-  background: color-mix(in srgb, var(--so-ink) 5%, transparent);
+  background: var(--so-ink);
+  color: var(--so-bg);
   font-size: 14px;
   line-height: 21px;
+}
+
+.so .so-copy .so-ico {
+  width: 16px;
+  height: 16px;
 }
 
 /* The round button, open: real size and colors */
 .so .so-button {
   position: absolute;
   left: 16px;
-  top: 286px;
+  top: 444px;
   display: grid;
   place-items: center;
   width: 40px;
@@ -410,6 +463,12 @@
   background: var(--so-ink);
   color: var(--so-bg);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+/* The phone's sheet stays as measured below: the two site-wide rows
+   (Mode, Accent) are drawn on the wide window only. */
+.so .so-phone .so-more {
+  display: none;
 }
 
 /* ---- compact: the same round on a phone ----

@@ -276,4 +276,32 @@ describe("Panel", () => {
       for (const part of s.split(/,(?![^(]*\))/))
         expect(part.trim()).toMatch(/^\.sw-/);
   });
+
+  it("draws a colour dot and a preset icon beside an option's label", async () => {
+    const a = variant("accent", "black", true);
+    a.setAttribute("data-switches-swatch", "#111111");
+    const b = variant("accent", "blue");
+    b.setAttribute("data-switches-swatch", "#2563eb");
+    const c = variant("accent", "orange");
+    c.setAttribute("data-switches-swatch", "#ea580c");
+    const m1 = variant("mode", "light");
+    m1.setAttribute("data-switches-icon", "sun");
+    const m2 = variant("mode", "dark");
+    m2.setAttribute("data-switches-icon", "moon");
+    const m3 = variant("mode", "system", true);
+    m3.setAttribute("data-switches-icon", "system");
+    await openPanel();
+    const blue = screen.getByRole("radio", { name: "Blue" });
+    expect((blue.querySelector(".sw-dot") as HTMLElement).style.background).toBe("rgb(37, 99, 235)");
+    expect(screen.getByRole("radio", { name: "Dark" }).querySelector("svg.sw-opt-icon")).toBeTruthy();
+    expect(screen.getByRole("radio", { name: "Black" }).querySelector("svg")).toBeNull();
+  });
+
+  it("the copy button carries a copy icon on the left", async () => {
+    variant("hero", "a", true);
+    variant("hero", "b");
+    await openPanel();
+    const copy = screen.getByRole("button", { name: "Copy my picks" });
+    expect(copy.firstElementChild?.tagName.toLowerCase()).toBe("svg");
+  });
 });

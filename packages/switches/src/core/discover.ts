@@ -1,4 +1,15 @@
-export type SectionOption = { option: string; label: string };
+export type SectionOption = {
+  option: string;
+  label: string;
+  /** A safe CSS colour, drawn as a dot beside the label. */
+  swatch?: string;
+  /** A preset icon name ("sun", "moon", "system"), drawn beside the label. */
+  icon?: string;
+};
+
+// Only plain colours reach a style: #hex, rgb()/hsl() with numbers, or a name.
+const SWATCH = /^(#[0-9a-f]{3,8}|(?:rgb|hsl)a?\([\d\s.,%/]{1,40}\)|[a-z]{3,24})$/i;
+const ICONS = new Set(["sun", "moon", "system"]);
 export type Section = {
   name: string;
   options: SectionOption[];
@@ -32,9 +43,13 @@ function scan(root: ParentNode, warned?: Set<string>): Section[] {
       }
       continue;
     }
+    const swatch = el.getAttribute("data-switches-swatch")?.trim();
+    const icon = el.getAttribute("data-switches-icon")?.trim();
     s.options.push({
       option,
       label: el.getAttribute("data-switches-label") || humanise(option),
+      ...(swatch && SWATCH.test(swatch) ? { swatch } : {}),
+      ...(icon && ICONS.has(icon) ? { icon } : {}),
     });
     if (!s.explicitDefault && el.hasAttribute("data-switches-default")) {
       s.defaultOption = option;
@@ -79,6 +94,8 @@ export function observeSections(
       "data-switches-name",
       "data-switches-option",
       "data-switches-label",
+      "data-switches-swatch",
+      "data-switches-icon",
       "data-switches-default",
     ],
   });

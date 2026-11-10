@@ -10,6 +10,10 @@ export type VariantProps = {
   name: string;
   option: string;
   label?: string;
+  /** A colour (#hex, rgb(), hsl() or a name): the panel draws a dot of it beside the label. */
+  swatch?: string;
+  /** "sun", "moon" or "system": the panel draws that icon beside the label. */
+  icon?: "sun" | "moon" | "system";
   default?: boolean;
   children: ReactNode;
 };
@@ -82,6 +86,8 @@ export function Variant(props: VariantProps) {
         data-switches-name={name}
         data-switches-option={option}
         data-switches-label={label}
+        data-switches-swatch={props.swatch}
+        data-switches-icon={props.icon}
         data-switches-default={props.default ? "" : undefined}
       >
         {children}

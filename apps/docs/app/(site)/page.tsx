@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Caveat } from "next/font/google";
 import Link from "next/link";
 import { withBase } from "../base";
-import { DESCRIPTION, INSTALL, LICENSE, PRODUCT_NAME, TAGLINE } from "../site";
+import { DESCRIPTION, INSTALL, PRODUCT_NAME, TAGLINE } from "../site";
 import { Code } from "./components/Code";
 import { ClickHint } from "./components/ClickHint";
 import { CopyButton } from "./components/CopyButton";
@@ -52,28 +52,10 @@ const jobs = [
   },
 ];
 
-const differences = [
-  {
-    name: "Storybook",
-    text: `shows components on their own; ${PRODUCT_NAME} works in place, on the real page, with the real content around each version.`,
-  },
-  {
-    name: "Feature flags",
-    text: `need a backend and are for shipping features to users; ${PRODUCT_NAME} has no backend, is for design review and comes out before launch.`,
-  },
-  {
-    name: "Agentation",
-    text: `is for feedback on a page (“fix this”); ${PRODUCT_NAME} is for choosing between versions (“pick one of these”).`,
-  },
-];
-
 export default function Overview() {
   return (
     <>
       <div className="s-topline">
-        <p className="s-stat">
-          Open source <span aria-hidden>·</span> {LICENSE}
-        </p>
         <p className="s-install">
           <code>{INSTALL}</code>
           <CopyButton text={INSTALL} variant="icon" label="Copy install command" />
@@ -158,15 +140,6 @@ export default function Overview() {
         the production server or build output prints a one-time reminder while <code>&lt;Switches /&gt;</code> renders
         and the flag isn’t <code>off</code>.
       </p>
-
-      <h2 id="differs">How it differs</h2>
-      <ul className="s-leads">
-        {differences.map((d) => (
-          <li key={d.name}>
-            <b>{d.name}</b> {d.text}
-          </li>
-        ))}
-      </ul>
     </>
   );
 }

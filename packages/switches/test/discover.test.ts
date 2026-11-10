@@ -112,3 +112,31 @@ describe("observeSections", () => {
     stop();
   });
 });
+
+describe("option decorations", () => {
+  it("reads a safe swatch and a preset icon", () => {
+    document.body.innerHTML = `
+      ${v("accent", "blue", 'data-switches-swatch="#2563eb"')}
+      ${v("accent", "red", 'data-switches-swatch="rgb(220, 38, 38)"')}
+      ${v("mode", "dark", 'data-switches-icon="moon"')}`;
+    const [accent, mode] = discoverSections(document);
+    expect(accent!.options).toEqual([
+      { option: "blue", label: "Blue", swatch: "#2563eb" },
+      { option: "red", label: "Red", swatch: "rgb(220, 38, 38)" },
+    ]);
+    expect(mode!.options).toEqual([{ option: "dark", label: "Dark", icon: "moon" }]);
+  });
+
+  it("drops anything that is not a plain colour or a known icon", () => {
+    document.body.innerHTML = `
+      ${v("accent", "a", 'data-switches-swatch="red;background:url(x)"')}
+      ${v("accent", "b", 'data-switches-swatch="url(javascript:alert(1))"')}
+      ${v("accent", "c", 'data-switches-icon="skull"')}`;
+    const [accent] = discoverSections(document);
+    expect(accent!.options).toEqual([
+      { option: "a", label: "A" },
+      { option: "b", label: "B" },
+      { option: "c", label: "C" },
+    ]);
+  });
+});

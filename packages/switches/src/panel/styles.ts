@@ -181,7 +181,10 @@ export const css = `
   padding: 2px;
 }
 .sw-segment {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   text-align: center;
   border-radius: 7px;
   padding: 4px 0;
@@ -242,9 +245,11 @@ export const css = `
   width: 100%;
   margin-top: 8px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 8px;
   border-radius: 12px;
-  background-color: color-mix(in srgb, var(--sw-c-ink) 5%, transparent);
+  background-color: var(--sw-c-ink);
+  color: var(--sw-c-bg);
   padding: 10px 12px;
   font-size: 14px;
   letter-spacing: -0.01em;
@@ -252,8 +257,29 @@ export const css = `
 }
 @media (hover: hover) {
   .sw-copy:hover {
-    background-color: color-mix(in srgb, var(--sw-c-ink) 9%, transparent);
+    background-color: color-mix(in srgb, var(--sw-c-ink) 82%, var(--sw-c-bg));
   }
+}
+.sw-copy-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+/* Option decorations: a colour dot or a preset icon beside the label. */
+.sw-dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px rgba(128, 128, 128, 0.5);
+}
+.sw-opt-icon {
+  display: block;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
 }
 /* Screen-reader-only live region for the "Copied" confirmation. */
 .sw-sr {

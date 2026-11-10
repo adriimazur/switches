@@ -61,6 +61,23 @@ export default function Api() {
             </tr>
             <tr>
               <td>
+                <code>swatch</code>
+              </td>
+              <td>string</td>
+              <td>
+                A colour (<code>#2563eb</code>, <code>rgb(…)</code>, <code>hsl(…)</code> or a name). The panel draws a
+                dot of it beside the label. For colour choices.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code>icon</code>
+              </td>
+              <td>“sun”, “moon” or “system”</td>
+              <td>An icon drawn beside the label in the panel. For light, dark and system choices.</td>
+            </tr>
+            <tr>
+              <td>
                 <code>default</code>
               </td>
               <td>boolean</td>

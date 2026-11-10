@@ -17,7 +17,6 @@ const LAYOUT = ["headline", "photo", "classes"] as const;
 test("overview: one h1, the six steps, the sections and the install snippet", async ({ page }) => {
   await page.goto(withBase("/"));
   await expect(page.locator("h1")).toHaveCount(1);
-  await expect(page.getByText("Open source · MIT")).toBeVisible();
 
   const steps = page.locator("ol.s-steps > li");
   await expect(steps).toHaveCount(6);
@@ -30,7 +29,7 @@ test("overview: one h1, the six steps, the sections and the install snippet", as
     "Paste it into Claude Code.",
   ]);
 
-  for (const name of ["How you use it", "How Claude uses it", "Try it", "Install", "How it differs"]) {
+  for (const name of ["How you use it", "How Claude uses it", "Try it", "Install"]) {
     await expect(page.getByRole("heading", { level: 2, name, exact: true })).toBeVisible();
   }
   await expect(page.getByRole("img", { name: /Switches panel open at the bottom left/ })).toBeVisible();
@@ -80,7 +79,7 @@ test.describe("the illustration", () => {
     await expect(page.locator(".il .so-hero")).toHaveAttribute("data-version", "0");
     await expect(page.locator(".il .ss-stage")).not.toHaveAttribute("data-still", /.*/);
     // Then the pointer picks Tiers: the segmented control moves and the pricing changes.
-    await expect(page.locator(".il .so-seg .ss-seg__option[data-on]")).toHaveText("Tiers", { timeout: 10_000 });
+    await expect(page.locator(".il .so-seg .ss-seg__option[data-on]").first()).toHaveText("Tiers", { timeout: 10_000 });
     await expect(page.locator(".il .so-pricing")).toHaveAttribute("data-version", "0", { timeout: 10_000 });
   });
 
@@ -95,7 +94,7 @@ test.describe("the illustration", () => {
       for (let i = 0; i < 4; i++) {
         await page.waitForTimeout(300);
         await expect(page.locator(sw)).toHaveAttribute("aria-checked", "true");
-        await expect(page.locator(".il .so-seg .ss-seg__option[data-on]")).toHaveText("One plan");
+        await expect(page.locator(".il .so-seg .ss-seg__option[data-on]").first()).toHaveText("One plan");
         const running = await page.evaluate(
           () => document.getAnimations().filter((a) => a.effect instanceof KeyframeEffect && (a.effect.target as Element | null)?.closest?.(".il")).length,
         );

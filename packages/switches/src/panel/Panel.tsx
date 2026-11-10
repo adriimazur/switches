@@ -4,6 +4,7 @@ import { humanise, type Section } from "../core/discover";
 import { usePanel, type PanelApi } from "./usePanel";
 import { css } from "./styles";
 import { revealSection } from "./reveal";
+import { Icon, isIconName } from "./icons";
 
 const MAX_NOTE = 280;
 const COPIED_MS = 1500;
@@ -194,6 +195,8 @@ export function Panel() {
                           }}
                           className="sw-segment"
                         >
+                          {o.swatch && <span className="sw-dot" style={{ background: o.swatch }} aria-hidden />}
+                          {isIconName(o.icon) && <Icon name={o.icon} className="sw-opt-icon" />}
                           {o.label}
                         </button>
                       ))}
@@ -205,6 +208,7 @@ export function Panel() {
             </ul>
           )}
           <button type="button" className="sw-copy" onClick={copy}>
+            <Icon name="copy" className="sw-copy-icon" />
             {copied ? "Copied" : "Copy my picks"}
           </button>
           <span aria-live="polite" className="sw-sr">

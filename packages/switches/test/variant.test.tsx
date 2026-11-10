@@ -78,6 +78,26 @@ describe("Variant SSR", () => {
     expect(ws.every((w) => w.style.display === "contents")).toBe(true);
   });
 
+  it("writes swatch and icon attributes only when given", () => {
+    const html = renderToString(
+      <>
+        <Variant name="accent" option="blue" swatch="#2563eb">
+          x
+        </Variant>
+        <Variant name="mode" option="dark" icon="moon">
+          y
+        </Variant>
+        <Variant name="plain" option="a">
+          z
+        </Variant>
+      </>,
+    );
+    expect(html).toContain('data-switches-swatch="#2563eb"');
+    expect(html).toContain('data-switches-icon="moon"');
+    expect(html.match(/data-switches-swatch/g)).toHaveLength(1);
+    expect(html.match(/data-switches-icon/g)).toHaveLength(1);
+  });
+
   it("writes label and default attributes only when given", () => {
     const html = ssr(
       <Variant name="hero" option="b" label="Big B" default>

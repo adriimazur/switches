@@ -75,3 +75,12 @@ export function useCalmPicked(): boolean {
 export function useFullPicked(): boolean {
   return useSyncExternalStore(subscribe, isFullPicked, () => false);
 }
+
+/** Live pick for a section (null when there is none), without a reload. */
+export function useSitePick(name: string): string | null {
+  return useSyncExternalStore(
+    subscribe,
+    () => sitePick(name),
+    () => null,
+  );
+}

@@ -2,7 +2,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Bar, Phone, Segmented, Stage, Toggle, Window, type Act } from './kit'
 import { FullMotionContext, StillContext } from './kit/reduced-motion'
-import { useCalmPicked, useFullPicked } from '../sitePicks'
+import { useCalmPicked, useFullPicked, useSitePick } from '../sitePicks'
 import './switches-round.css'
 
 // The Switches Overview illustration, started from the panel-annotation gold:
@@ -102,7 +102,30 @@ function usePhoneColumn() {
   return phone
 }
 
+// The panel's own preset icons (Mono Icons, MIT; see THIRD_PARTY_NOTICES.md).
+const ICON_PATHS = {
+  sun: 'M12 2a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm7.071 2.929a1 1 0 0 1 0 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0zm-14.142 0a1 1 0 0 1 1.414 0l.707.707A1 1 0 0 1 5.636 7.05l-.707-.707a1 1 0 0 1 0-1.414zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-6 4a6 6 0 1 1 12 0 6 6 0 0 1-12 0zm-4 0a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2H3a1 1 0 0 1-1-1zm17 0a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2h-1a1 1 0 0 1-1-1zM5.636 16.95a1 1 0 0 1 1.414 1.414l-.707.707a1 1 0 0 1-1.414-1.414l.707-.707zm11.314 1.414a1 1 0 0 1 1.414-1.414l.707.707a1 1 0 0 1-1.414 1.414l-.707-.707zM12 19a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1z',
+  moon: 'M9.36 3.293a1 1 0 0 1 .187 1.157A7.45 7.45 0 0 0 19.55 14.453a1 1 0 0 1 1.343 1.343 9.45 9.45 0 1 1-12.69-12.69 1 1 0 0 1 1.158.187zM6.823 6.67A7.45 7.45 0 0 0 17.33 17.179 9.45 9.45 0 0 1 6.821 6.67z',
+  system: 'M2 5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-7v2h3a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h3v-2H4a2 2 0 0 1-2-2V5zm18 11V5H4v11h16z',
+  copy: 'M2 4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-4H4a2 2 0 0 1-2-2V4zm8 12v4h10V10h-4v4a2 2 0 0 1-2 2h-4zm4-2V4H4v10h10z',
+} as const
+
+function Ico({ name }: { name: keyof typeof ICON_PATHS }) {
+  return (
+    <svg viewBox="0 0 24 24" className="so-ico" fill="currentColor" aria-hidden>
+      <path d={ICON_PATHS[name]} />
+    </svg>
+  )
+}
+
+const MODES = ['light', 'dark', 'system']
+const ACCENTS = ['black', 'blue', 'orange']
+
 function Page({ s }: { s: S }) {
+  // The two site-wide sections follow what the visitor has picked (the sheet
+  // here is a picture of the real panel, so it shows the real picks).
+  const mode = Math.max(0, MODES.indexOf(useSitePick('mode') ?? 'system'))
+  const accent = Math.max(0, ACCENTS.indexOf(useSitePick('accent') ?? 'black'))
   return (
     <div className="so-page">
       <div className="so-nav">
@@ -149,9 +172,32 @@ function Page({ s }: { s: S }) {
               <span className="so-label">Pricing</span>
               <Segmented items={PLANS} value={s.plan} targets={['seg-0', 'seg-1', 'seg-2']} cursor="pointer" className="so-seg" />
             </div>
+            <div className="so-item so-more">
+              <span className="so-label">Mode</span>
+              <Segmented
+                items={[
+                  <span key="l" className="so-opt"><Ico name="sun" />Light</span>,
+                  <span key="d" className="so-opt"><Ico name="moon" />Dark</span>,
+                  <span key="s" className="so-opt"><Ico name="system" />System</span>,
+                ]}
+                value={mode}
+                className="so-seg"
+              />
+            </div>
+            <div className="so-item so-more">
+              <span className="so-label">Accent</span>
+              <Segmented
+                items={ACCENTS.map((a) => (
+                  <span key={a} className="so-opt"><i className="so-dot" data-accent={a} />{a[0]!.toUpperCase() + a.slice(1)}</span>
+                ))}
+                value={accent}
+                className="so-seg"
+              />
+            </div>
           </div>
         </div>
         <span className="so-copy">
+          <Ico name="copy" />
           <span>Copy my picks</span>
         </span>
       </div>
@@ -201,7 +247,7 @@ export default function SwitchesOverview({ className }: { className?: string }) 
           <FullMotionContext.Provider value={full}>
             <Stage
               width={560}
-              height={380}
+              height={542}
               compact={{ below: 520, width: 358, height: 560 }}
               initial={initial}
               poster={initial}
