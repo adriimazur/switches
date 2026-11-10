@@ -24,11 +24,11 @@ test("the panel lists Layout, Mode and Accent on the Overview, in page order", a
   await expect(radios("Layout")).toHaveText(["Big headline", "Photo split", "Class list"]);
   await expect(radios("Mode")).toHaveText(["Light", "Dark", "System"]);
   await expect(radios("Mode").filter({ hasText: "System" })).toHaveAttribute("aria-checked", "true");
-  // Mode is drawn with preset icons, Accent with colour dots.
+  // Mode is drawn with preset icons, Accent is plain text.
   await expect(radios("Mode").locator("svg.sw-opt-icon")).toHaveCount(3);
-  await expect(radios("Accent").locator(".sw-dot")).toHaveCount(3);
-  await expect(radios("Accent")).toHaveText(["Black", "Blue", "Orange"]);
-  await expect(radios("Accent").filter({ hasText: "Black" })).toHaveAttribute("aria-checked", "true");
+  await expect(radios("Accent").locator(".sw-dot, svg")).toHaveCount(0);
+  await expect(radios("Accent")).toHaveText(["System", "Black", "Blue", "Orange"]);
+  await expect(radios("Accent").filter({ hasText: "System" })).toHaveAttribute("aria-checked", "true");
   // Copy my picks: a copy icon on the left of the black button.
   await expect(dialog.getByRole("button", { name: "Copy my picks" }).locator("svg")).toHaveCount(1);
 });
@@ -143,23 +143,24 @@ test.describe("accent", () => {
     page.getByTestId("layout-headline").locator(".kh-btn").evaluate((el) => getComputedStyle(el).backgroundColor);
 
   const cases = [
-    { option: "black", link: "rgb(27, 27, 26)", fill: "rgb(17, 17, 17)" },
-    { option: "blue", link: "rgb(31, 95, 214)", fill: "rgb(37, 99, 235)" },
-    { option: "orange", link: "rgb(178, 60, 10)", fill: "rgb(194, 65, 12)" },
+    { option: "system", fill: "rgb(52, 199, 89)" },
+    { option: "black", fill: "rgb(17, 17, 17)" },
+    { option: "blue", fill: "rgb(37, 99, 235)" },
+    { option: "orange", fill: "rgb(194, 65, 12)" },
   ];
   for (const c of cases) {
-    test(`accent:${c.option} colours links and the Try it mock`, async ({ page }) => {
+    test(`accent:${c.option} colours the Try it mock, never the links`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: "light" });
       await page.goto(withBase(`/?switches=accent:${c.option}`));
-      expect(await link(page)).toBe(c.link);
+      expect(await link(page)).toBe("rgb(31, 95, 214)");
       expect(await glaze(page)).toBe(c.fill);
     });
   }
 
-  test("black is the default", async ({ page }) => {
+  test("System (green) is the default", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" });
     await page.goto(withBase("/"));
-    expect(await glaze(page)).toBe("rgb(17, 17, 17)");
+    expect(await glaze(page)).toBe("rgb(52, 199, 89)");
   });
 
   test("the illustration's switch changes colour with the accent", async ({ page }) => {
@@ -167,7 +168,7 @@ test.describe("accent", () => {
     const track = (p: Page) =>
       p.locator(".il .so-live .so-switch").evaluate((el) => getComputedStyle(el).backgroundColor);
     await page.goto(withBase("/"));
-    expect(await track(page)).toBe("rgb(17, 17, 17)");
+    expect(await track(page)).toBe("rgb(52, 199, 89)");
     const dialog = await openPanel(page);
     await dialog.getByRole("radiogroup", { name: "Accent" }).getByRole("radio", { name: "Blue" }).click();
     await expect.poll(() => track(page)).toBe("rgb(37, 99, 235)");
@@ -181,7 +182,7 @@ test.describe("accent", () => {
     const dialog = await openPanel(page);
     await dialog.getByRole("radiogroup", { name: "Accent" }).getByRole("radio", { name: "Orange" }).click();
     await expect.poll(() => glaze(page)).toBe("rgb(194, 65, 12)");
-    expect(await link(page)).toBe("rgb(178, 60, 10)");
+    expect(await link(page)).toBe("rgb(31, 95, 214)");
     await page.waitForTimeout(600);
     expect(await page.evaluate(() => window.scrollY)).toBe(0);
   });

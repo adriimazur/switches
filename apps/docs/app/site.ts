@@ -11,9 +11,10 @@ export const TAGLINE = "Let your client pick the version, on the real site.";
 
 /** Meta description and the Overview intro. */
 export const DESCRIPTION =
-  "a free, open-source React package that keeps several AI-made versions of a page section on your live site, so anyone can flip between them, pick one and send the picks back to Claude Code.";
+  "a free, source-available React package that keeps several AI-made versions of a page section on your live site, so anyone can flip between them, pick one and send the picks back to Claude Code.";
 
-export const LICENSE = "MIT";
+export const LICENSE = "PolyForm Shield 1.0.0";
+export const LICENSE_URL = "https://polyformproject.org/licenses/shield/1.0.0";
 
 /** Shown in the sidebar. Keep in step with packages/switches/package.json. */
 export const VERSION = "0.1.0";

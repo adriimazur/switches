@@ -76,7 +76,7 @@ export const css = `
   position: absolute;
   bottom: 52px;
   left: 0;
-  width: 268px;
+  width: 295px;
   transform-origin: 0 100%;
   border-radius: 18px;
   border: 1px solid var(--sw-c-line);
@@ -248,8 +248,7 @@ export const css = `
   justify-content: center;
   gap: 8px;
   border-radius: 12px;
-  background-color: var(--sw-c-ink);
-  color: var(--sw-c-bg);
+  background-color: color-mix(in srgb, var(--sw-c-ink) 5%, transparent);
   padding: 10px 12px;
   font-size: 14px;
   letter-spacing: -0.01em;
@@ -257,7 +256,7 @@ export const css = `
 }
 @media (hover: hover) {
   .sw-copy:hover {
-    background-color: color-mix(in srgb, var(--sw-c-ink) 82%, var(--sw-c-bg));
+    background-color: color-mix(in srgb, var(--sw-c-ink) 9%, transparent);
   }
 }
 .sw-copy-icon {
@@ -269,11 +268,10 @@ export const css = `
 /* Option decorations: a colour dot or a preset icon beside the label. */
 .sw-dot {
   display: block;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   flex-shrink: 0;
   border-radius: 9999px;
-  box-shadow: inset 0 0 0 1px rgba(128, 128, 128, 0.5);
 }
 .sw-opt-icon {
   display: block;

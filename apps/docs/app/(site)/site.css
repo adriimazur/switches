@@ -49,10 +49,10 @@ html:has(> body > .site):is([data-switches-picks="mode:dark"], [data-switches-pi
      a fill that carries text (--s-accent with --s-on-accent, the Try it
      mock's glaze and the illustration's switch). Black flips to near-white
      in dark mode. */
-  --s-link: light-dark(#1b1b1a, #f0f0ee);
-  --s-mark: light-dark(#1b1b1a, #f0f0ee);
-  --s-accent: light-dark(#111111, #f0f0ee);
-  --s-on-accent: light-dark(#ffffff, #111111);
+  --s-link: light-dark(#1f5fd6, #7ea6ff);
+  --s-mark: light-dark(#2f6fec, #3b78f0);
+  --s-accent: light-dark(#34c759, #30d158);
+  --s-on-accent: #06260f;
   --s-radius: 10px;
   --s-col: 560px;
   --s-side: 196px;
@@ -71,18 +71,20 @@ html:has(> body > .site):is([data-switches-picks="mode:dark"], [data-switches-pi
 
 /* Blue: fill 5.17:1 with white text (light, #2563eb) and 4.66:1 (dark, #2b6cf0) */
 html:is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) .site {
-  --s-link: light-dark(#1f5fd6, #7ea6ff);
-  --s-mark: light-dark(#2f6fec, #3b78f0);
   --s-accent: light-dark(#2563eb, #2b6cf0);
   --s-on-accent: #ffffff;
 }
 
 /* Orange: fill 5.18:1 with white text; links 5.82:1 (light) / 9.02:1 (dark) */
 html:is([data-switches-picks="accent:orange"], [data-switches-picks^="accent:orange,"], [data-switches-picks$=",accent:orange"], [data-switches-picks*=",accent:orange,"]) .site {
-  --s-link: light-dark(#b23c0a, #ff9a5c);
-  --s-mark: light-dark(#c2410c, #e0611f);
   --s-accent: #c2410c;
   --s-on-accent: #ffffff;
+}
+
+html:is([data-switches-picks="accent:black"], [data-switches-picks^="accent:black,"], [data-switches-picks$=",accent:black"], [data-switches-picks*=",accent:black,"]) .site {
+  --s-accent: light-dark(#111111, #f0f0ee);
+  --s-knob: light-dark(#ffffff, #111111);
+  --s-on-accent: light-dark(#ffffff, #111111);
 }
 
 body:has(> .site) {
@@ -98,13 +100,16 @@ html:has(> body > .site) {
   --sw-muted: light-dark(#5f5e5a, #908f8a);
   --sw-line: light-dark(#e2e0da, #282826);
   --sw-line-strong: light-dark(#c9c6be, #3c3c39);
-  --sw-accent: light-dark(#111111, #8d8d8b);
+  --sw-accent: light-dark(#34c759, #30d158);
 }
 html:has(> body > .site):is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) {
   --sw-accent: light-dark(#2563eb, #2b6cf0);
 }
 html:has(> body > .site):is([data-switches-picks="accent:orange"], [data-switches-picks^="accent:orange,"], [data-switches-picks$=",accent:orange"], [data-switches-picks*=",accent:orange,"]) {
   --sw-accent: #c2410c;
+}
+html:has(> body > .site):is([data-switches-picks="accent:black"], [data-switches-picks^="accent:black,"], [data-switches-picks$=",accent:black"], [data-switches-picks*=",accent:black,"]) {
+  --sw-accent: light-dark(#111111, #8d8d8b);
 }
 
 /* Animation: System (no pick, or animation:system) follows the OS (the
@@ -1005,6 +1010,37 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
   margin-top: 28px;
 }
 
+/* Play / pause, under the picture at the bottom right */
+.s-prose > .il-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.il-play {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--s-faint);
+  cursor: pointer;
+}
+
+.il-play:hover {
+  color: var(--s-ink);
+  background: var(--s-chip);
+}
+
+.il-play svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
 /* ---------- the "click here" hint (Overview) ----------
    A hand-drawn arrow and a handwritten word pointing at the Switches round
    button; placed by components/ClickHint.tsx. The resting state is the
@@ -1226,21 +1262,23 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
     --s-line-strong: #d9d9d6;
     --s-sunk: #f4f4f2;
     --s-chip: #f0f0ee;
-    --s-link: #1b1b1a;
-    --s-mark: #1b1b1a;
-    --s-accent: #111111;
-    --s-on-accent: #ffffff;
-  }
-  html:is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) .site {
     --s-link: #1f5fd6;
     --s-mark: #2f6fec;
+    --s-accent: #34c759;
+    --s-on-accent: #06260f;
+  }
+  html:is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) .site {
     --s-accent: #2563eb;
     --s-on-accent: #ffffff;
   }
   html:is([data-switches-picks="accent:orange"], [data-switches-picks^="accent:orange,"], [data-switches-picks$=",accent:orange"], [data-switches-picks*=",accent:orange,"]) .site {
-    --s-link: #b23c0a;
-    --s-mark: #c2410c;
     --s-accent: #c2410c;
+    --s-on-accent: #ffffff;
+  }
+
+  html:is([data-switches-picks="accent:black"], [data-switches-picks^="accent:black,"], [data-switches-picks$=",accent:black"], [data-switches-picks*=",accent:black,"]) .site {
+    --s-accent: #111111;
+    --s-knob: #ffffff;
     --s-on-accent: #ffffff;
   }
   body:has(> .site) {
@@ -1252,13 +1290,16 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
     --sw-muted: #5f5e5a;
     --sw-line: #e2e0da;
     --sw-line-strong: #c9c6be;
-    --sw-accent: #111111;
+    --sw-accent: #34c759;
   }
   html:has(> body > .site):is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) {
     --sw-accent: #2563eb;
   }
   html:has(> body > .site):is([data-switches-picks="accent:orange"], [data-switches-picks^="accent:orange,"], [data-switches-picks$=",accent:orange"], [data-switches-picks*=",accent:orange,"]) {
     --sw-accent: #c2410c;
+  }
+  html:has(> body > .site):is([data-switches-picks="accent:black"], [data-switches-picks^="accent:black,"], [data-switches-picks$=",accent:black"], [data-switches-picks*=",accent:black,"]) {
+    --sw-accent: #111111;
   }
   .s-try {
     --kh-surface: #ffffff;
@@ -1276,22 +1317,24 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
       --s-line-strong: #353534;
       --s-sunk: #171717;
       --s-chip: #1f1f1e;
-      --s-link: #f0f0ee;
-      --s-mark: #f0f0ee;
-      --s-accent: #f0f0ee;
-      --s-on-accent: #111111;
-    }
-    html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]):is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) .site {
       --s-link: #7ea6ff;
       --s-mark: #3b78f0;
+      --s-accent: #30d158;
+      --s-on-accent: #06260f;
+    }
+    html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]):is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) .site {
       --s-accent: #2b6cf0;
       --s-on-accent: #ffffff;
     }
     html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]):is([data-switches-picks="accent:orange"], [data-switches-picks^="accent:orange,"], [data-switches-picks$=",accent:orange"], [data-switches-picks*=",accent:orange,"]) .site {
-      --s-link: #ff9a5c;
-      --s-mark: #e0611f;
       --s-accent: #c2410c;
       --s-on-accent: #ffffff;
+    }
+
+    html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]):is([data-switches-picks="accent:black"], [data-switches-picks^="accent:black,"], [data-switches-picks$=",accent:black"], [data-switches-picks*=",accent:black,"]) .site {
+      --s-accent: #f0f0ee;
+      --s-knob: #111111;
+      --s-on-accent: #111111;
     }
     html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]) body:has(> .site) {
       background: #111111;
@@ -1304,6 +1347,9 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
       --sw-line-strong: #3c3c39;
     }
     html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]):not(:is([data-switches-picks*="accent:blue"], [data-switches-picks*="accent:orange"])):has(> body > .site) {
+      --sw-accent: #30d158;
+    }
+    html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]):is([data-switches-picks="accent:black"], [data-switches-picks^="accent:black,"], [data-switches-picks$=",accent:black"], [data-switches-picks*=",accent:black,"]) {
       --sw-accent: #8d8d8b;
     }
     html:not([data-switches-picks="mode:light"], [data-switches-picks^="mode:light,"], [data-switches-picks$=",mode:light"], [data-switches-picks*=",mode:light,"]) .s-try {
@@ -1322,22 +1368,24 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
     --s-line-strong: #353534;
     --s-sunk: #171717;
     --s-chip: #1f1f1e;
-    --s-link: #f0f0ee;
-    --s-mark: #f0f0ee;
-    --s-accent: #f0f0ee;
-    --s-on-accent: #111111;
-  }
-  html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]):is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) .site {
     --s-link: #7ea6ff;
     --s-mark: #3b78f0;
+    --s-accent: #30d158;
+    --s-on-accent: #06260f;
+  }
+  html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]):is([data-switches-picks="accent:blue"], [data-switches-picks^="accent:blue,"], [data-switches-picks$=",accent:blue"], [data-switches-picks*=",accent:blue,"]) .site {
     --s-accent: #2b6cf0;
     --s-on-accent: #ffffff;
   }
   html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]):is([data-switches-picks="accent:orange"], [data-switches-picks^="accent:orange,"], [data-switches-picks$=",accent:orange"], [data-switches-picks*=",accent:orange,"]) .site {
-    --s-link: #ff9a5c;
-    --s-mark: #e0611f;
     --s-accent: #c2410c;
     --s-on-accent: #ffffff;
+  }
+
+  html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]):is([data-switches-picks="accent:black"], [data-switches-picks^="accent:black,"], [data-switches-picks$=",accent:black"], [data-switches-picks*=",accent:black,"]) .site {
+    --s-accent: #f0f0ee;
+    --s-knob: #111111;
+    --s-on-accent: #111111;
   }
   html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]) body:has(> .site) {
     background: #111111;
@@ -1350,6 +1398,9 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
     --sw-line-strong: #3c3c39;
   }
   html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]):not(:is([data-switches-picks*="accent:blue"], [data-switches-picks*="accent:orange"])):has(> body > .site) {
+    --sw-accent: #30d158;
+  }
+  html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]):is([data-switches-picks="accent:black"], [data-switches-picks^="accent:black,"], [data-switches-picks$=",accent:black"], [data-switches-picks*=",accent:black,"]) {
     --sw-accent: #8d8d8b;
   }
   html:is([data-switches-picks="mode:dark"], [data-switches-picks^="mode:dark,"], [data-switches-picks$=",mode:dark"], [data-switches-picks*=",mode:dark,"]) .s-try {

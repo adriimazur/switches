@@ -161,8 +161,8 @@
 .so .so-hero {
   position: absolute;
   top: 46px;
-  left: 316px;
-  width: 228px;
+  left: 332px;
+  width: 212px;
   height: 124px;
 }
 
@@ -211,8 +211,8 @@
 .so .so-pricing {
   position: absolute;
   top: 192px;
-  left: 316px;
-  width: 228px;
+  left: 332px;
+  width: 212px;
   bottom: 0;
 }
 
@@ -276,7 +276,7 @@
 /* Where the pointer waits between loops: empty page between sheet and content */
 .so .so-rest {
   position: absolute;
-  left: 296px;
+  left: 322px;
   top: 300px;
   width: 1px;
   height: 1px;
@@ -288,7 +288,7 @@
   position: absolute;
   left: 16px;
   top: 42px;
-  width: 268px;
+  width: 295px;
   padding: 8px;
   border-radius: 18px;
   border: 1px solid var(--so-line);
@@ -359,7 +359,7 @@
 .so .so-switch[data-on] .ss-toggle__knob {
   transform: translateX(18px);
   /* White on a black or coloured track; dark on the near-white track of dark mode */
-  background: var(--s-on-accent, #fff);
+  background: var(--s-knob, #fff);
 }
 
 /* The kit's Segmented with the real control's look */
@@ -410,11 +410,10 @@
 
 .so .so-dot {
   display: block;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   flex-shrink: 0;
   border-radius: 999px;
-  box-shadow: inset 0 0 0 1px rgba(128, 128, 128, 0.5);
 }
 
 .so .so-dot[data-accent='black'] {
@@ -429,7 +428,7 @@
   background: #ea580c;
 }
 
-/* Copy my picks: the real button is black with a copy icon on the left */
+/* Copy my picks: the real button is grey with a copy icon on the left */
 .so .so-copy {
   display: flex;
   align-items: center;
@@ -438,8 +437,7 @@
   margin-top: 8px;
   padding: 10px 12px;
   border-radius: 12px;
-  background: var(--so-ink);
-  color: var(--so-bg);
+  background: color-mix(in srgb, var(--so-ink) 5%, transparent);
   font-size: 14px;
   line-height: 21px;
 }
@@ -791,4 +789,11 @@
   .so .so-phone .so-sheet {
     top: 472px;
   }
+}
+
+/* Once the loop is stopped (or the picture is a still) the sheet can be
+   clicked like the real panel. */
+.so-live[data-manual] .so-switch,
+.so-live[data-manual] .ss-seg__option {
+  cursor: pointer;
 }

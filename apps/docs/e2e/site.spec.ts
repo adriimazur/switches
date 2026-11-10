@@ -328,3 +328,51 @@ test("try it: the Photo split / Class list links reload with the pick and glide 
   // The one-shot marker is used up: a plain reload of the page stays where the browser puts it.
   expect(await page.evaluate(() => sessionStorage.getItem("sw:scroll"))).toBeNull();
 });
+
+test.describe("the illustration is clickable and can be paused", () => {
+  const sw = ".il .so-live .so-switch";
+  const plan = ".il .so-live [data-seg=plan] .ss-seg__option";
+
+  test("the pause button stops the loop and the picture can then be clicked", async ({ page }) => {
+    await page.goto(withBase("/"));
+    const button = page.getByRole("button", { name: "Pause the animation" });
+    await button.click();
+    await expect(page.getByRole("button", { name: "Play the animation" })).toHaveAttribute("aria-pressed", "true");
+    const hero = await page.locator(sw).getAttribute("aria-checked");
+    await page.waitForTimeout(2500);
+    expect(await page.locator(sw).getAttribute("aria-checked")).toBe(hero); // nothing moves on its own
+    await page.locator(sw).click();
+    await expect(page.locator(sw)).toHaveAttribute("aria-checked", hero === "true" ? "false" : "true");
+    await page.locator(plan).first().click();
+    await expect(page.locator(".il .so-live [data-seg=plan] .ss-seg__option[data-on]")).toHaveText("Tiers");
+    await expect(page.locator(".il .so-pricing")).toHaveAttribute("data-version", "0");
+  });
+
+  test("pressing the picture pauses it too, and Play starts the loop again", async ({ page }) => {
+    await page.goto(withBase("/"));
+    await page.locator(sw).click();
+    await expect(page.getByRole("button", { name: "Play the animation" })).toBeVisible();
+    await page.getByRole("button", { name: "Play the animation" }).click();
+    await expect(page.getByRole("button", { name: "Pause the animation" })).toBeVisible();
+    await expect(page.locator(".il .so-live .ss-stage")).not.toHaveAttribute("data-still", /.*/);
+  });
+
+  test("clicking Accent or Mode in the picture changes the real site", async ({ page }) => {
+    await page.goto(withBase("/"));
+    await page.locator(".il .so-live [data-seg=accent] .ss-seg__option", { hasText: "Blue" }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-switches-picks", /accent:blue/);
+    await page.locator(".il .so-live [data-seg=mode] .ss-seg__option", { hasText: "Dark" }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-switches-picks", /mode:dark/);
+  });
+
+  test.describe("with reduced motion", () => {
+    test.use({ reducedMotion: "reduce" });
+    test("there is no pause button, and the still can be clicked", async ({ page }) => {
+      await page.goto(withBase("/"));
+      await expect(page.getByRole("button", { name: /the animation/ })).toHaveCount(0);
+      const before = await page.locator(sw).getAttribute("aria-checked");
+      await page.locator(sw).click();
+      await expect(page.locator(sw)).not.toHaveAttribute("aria-checked", before!);
+    });
+  });
+});

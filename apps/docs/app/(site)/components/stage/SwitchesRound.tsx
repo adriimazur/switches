@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from 'react'
 import { Bar, Phone, Segmented, Stage, Toggle, Window, type Act } from './kit'
 import { FullMotionContext, StillContext } from './kit/reduced-motion'
 import { useCalmPicked, useFullPicked, useSitePick } from '../sitePicks'
@@ -20,7 +20,7 @@ import './switches-round.css'
 // pricing versions, Copy my picks) and the preview address. The page is
 // filler: what changes is its shape, not its words.
 
-type S = { hero: 0 | 1; plan: 0 | 1 }
+type S = { hero: 0 | 1; plan: 0 | 1 | 2 }
 
 // Opening frame = poster: Hero on (split), One plan picked. The poster tells
 // the story alone: a switch on, a version picked, the page showing both.
@@ -119,13 +119,13 @@ function Ico({ name }: { name: keyof typeof ICON_PATHS }) {
 }
 
 const MODES = ['light', 'dark', 'system']
-const ACCENTS = ['black', 'blue', 'orange']
+const ACCENTS = ['system', 'black', 'blue', 'orange']
 
 function Page({ s }: { s: S }) {
   // The two site-wide sections follow what the visitor has picked (the sheet
   // here is a picture of the real panel, so it shows the real picks).
   const mode = Math.max(0, MODES.indexOf(useSitePick('mode') ?? 'system'))
-  const accent = Math.max(0, ACCENTS.indexOf(useSitePick('accent') ?? 'black'))
+  const accent = Math.max(0, ACCENTS.indexOf(useSitePick('accent') ?? 'system'))
   return (
     <div className="so-page">
       <div className="so-nav">
@@ -143,7 +143,7 @@ function Page({ s }: { s: S }) {
         <HeroSplit />
       </div>
 
-      <div className="so-pricing" data-version={s.plan}>
+      <div className="so-pricing" data-version={s.plan === 1 ? 1 : 0}>
         <Bar w={64} h={8} r={3} tone={4} className="so-pricing-title" />
         <div className="so-v so-plan-a">
           <PlanCard />
@@ -170,7 +170,7 @@ function Page({ s }: { s: S }) {
           <div className="so-group">
             <div className="so-item">
               <span className="so-label">Pricing</span>
-              <Segmented items={PLANS} value={s.plan} targets={['seg-0', 'seg-1', 'seg-2']} cursor="pointer" className="so-seg" />
+              <Segmented items={PLANS} value={s.plan} targets={['seg-0', 'seg-1', 'seg-2']} cursor="pointer" className="so-seg" data-seg="plan" />
             </div>
             <div className="so-item so-more">
               <span className="so-label">Mode</span>
@@ -182,16 +182,18 @@ function Page({ s }: { s: S }) {
                 ]}
                 value={mode}
                 className="so-seg"
+                data-seg="mode"
               />
             </div>
             <div className="so-item so-more">
               <span className="so-label">Accent</span>
               <Segmented
                 items={ACCENTS.map((a) => (
-                  <span key={a} className="so-opt"><i className="so-dot" data-accent={a} />{a[0]!.toUpperCase() + a.slice(1)}</span>
+                  <span key={a} className="so-opt">{a[0]!.toUpperCase() + a.slice(1)}</span>
                 ))}
                 value={accent}
                 className="so-seg"
+                data-seg="accent"
               />
             </div>
           </div>
@@ -231,7 +233,22 @@ function SwitchesStill() {
   )
 }
 
-export default function SwitchesOverview({ className }: { className?: string }) {
+// Picks a radio in the real panel, so a click on the picture's Mode or Accent
+// row changes the real site (the panel is always mounted, even when closed).
+function pickInPanel(group: string, option: string) {
+  const radios = document.querySelectorAll<HTMLElement>(`.sw-sheet [role="radiogroup"][aria-label="${group}"] [role="radio"]`)
+  for (const r of Array.from(radios)) if (r.textContent?.trim().toLowerCase() === option) r.click()
+}
+
+export default function SwitchesOverview({
+  className,
+  paused,
+  onPause,
+}: {
+  className?: string
+  paused: boolean
+  onPause: () => void
+}) {
   const phone = usePhoneColumn()
   // The site's Animation pick, live, without a reload. Calm: the same still
   // as reduced motion (the kit's StillContext). Full: play even when the OS
@@ -240,9 +257,52 @@ export default function SwitchesOverview({ className }: { className?: string }) 
   const full = useFullPicked()
   const [ready, setReady] = useState(false)
   useEffect(() => setReady(true), [])
+
+  // Clicking: the picture works like the real panel. A press stops the loop
+  // where it is (ui takes over from the frame on screen), then the click
+  // changes that frame. With motion off the picture is a still and is
+  // clickable the same way.
+  const last = useRef<S>(initial)
+  const [ui, setUi] = useState<S>(initial)
+  const [reduced, setReduced] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const update = () => setReduced(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+  const still = calm || (reduced && !full)
+  const manual = paused || still
+  // Pausing: the frame on screen becomes the interactive state, before paint.
+  useLayoutEffect(() => {
+    if (paused) setUi(last.current)
+  }, [paused])
+  const onSheetClick = (e: MouseEvent<HTMLDivElement>) => {
+    const t = e.target as HTMLElement
+    if (t.closest('.so-switch')) {
+      setUi((u) => ({ ...u, hero: u.hero ? 0 : 1 }))
+      return
+    }
+    const opt = t.closest<HTMLElement>('.ss-seg__option')
+    const seg = t.closest<HTMLElement>('[data-seg]')
+    if (!opt || !seg) return
+    const i = Array.from(seg.querySelectorAll('.ss-seg__option')).indexOf(opt)
+    const group = seg.dataset.seg
+    if (group === 'plan') setUi((u) => ({ ...u, plan: i as 0 | 1 | 2 }))
+    else if (group === 'mode') pickInPanel('Mode', MODES[i]!)
+    else if (group === 'accent') pickInPanel('Accent', ACCENTS[i]!)
+  }
   return (
     <div className="so-round" data-ready={ready || undefined}>
-      <div className="so-live">
+      <div
+        className="so-live"
+        data-manual={manual || undefined}
+        onPointerDownCapture={() => {
+          if (!manual) onPause()
+        }}
+        onClick={onSheetClick}
+      >
         <StillContext.Provider value={calm}>
           <FullMotionContext.Provider value={full}>
             <Stage
@@ -251,12 +311,14 @@ export default function SwitchesOverview({ className }: { className?: string }) 
               compact={{ below: 520, width: 358, height: 560 }}
               initial={initial}
               poster={initial}
-              script={script}
-              cursor={{ at: 'rest', style: phone ? 'touch' : 'real', idle: false }}
+              script={paused ? undefined : script}
+              cursor={paused ? undefined : { at: 'rest', style: phone ? 'touch' : 'real', idle: false }}
               className={`so${className ? ` ${className}` : ''}`}
             >
-              {(s, _rect, layout): ReactNode =>
-                layout === 'compact' ? (
+              {(live, _rect, layout): ReactNode => {
+                last.current = live
+                const s = manual ? ui : live
+                return layout === 'compact' ? (
                   <Phone width={326} className="so-phone">
                     <Page s={s} />
                   </Phone>
@@ -265,7 +327,7 @@ export default function SwitchesOverview({ className }: { className?: string }) 
                     <Page s={s} />
                   </Window>
                 )
-              }
+              }}
             </Stage>
           </FullMotionContext.Provider>
         </StillContext.Provider>

@@ -109,4 +109,4 @@ Full docs and a live demo: https://mazur.design/switches.
 
 ## License
 
-MIT. See [LICENSE](https://github.com/adriimazur/switches/blob/main/LICENSE).
+Free to use, with the source available, under the [PolyForm Shield 1.0.0](https://polyformproject.org/licenses/shield/1.0.0) license. In short: use it on your own and your clients' sites, read it and change it, but don't use it to build a product that competes with Switches. See [LICENSE](https://github.com/adriimazur/switches/blob/main/LICENSE).

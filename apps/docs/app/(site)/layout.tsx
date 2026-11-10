@@ -5,6 +5,7 @@ import {
   AUTHOR_URL,
   GITHUB_URL,
   LICENSE,
+  LICENSE_URL,
   LINKEDIN_URL,
   NPM_URL,
   PRODUCT_NAME,
@@ -75,7 +76,8 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
           </main>
           <footer className="s-footer">
             <p>
-              {PRODUCT_NAME} is free and open source under the {LICENSE} license. Made by{" "}
+              {PRODUCT_NAME} is free to use, and its source is available under the{" "}
+              <a href={LICENSE_URL}>{LICENSE}</a> license. Made by{" "}
               <a href={AUTHOR_URL}>{AUTHOR_NAME}</a>.
             </p>
             <ul aria-label="Elsewhere">

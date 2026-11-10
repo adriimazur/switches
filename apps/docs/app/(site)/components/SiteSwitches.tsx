@@ -7,8 +7,9 @@ import { Variant } from "switches-react";
 // options are adjacent siblings, as the package expects. Option names are
 // distinct within a section and none is a prefix of another.
 //
-// Mode is drawn with the panel's preset icons, Accent with colour dots (the
-// `icon` and `swatch` props). The swatches match the accents in site.css.
+// Mode is drawn with the panel's preset icons (the `icon` prop); Accent is
+// plain text. It colours the panel's switches, the illustration and the Try it
+// mock, not the site's links (those stay blue). System is the green of an OS switch.
 //
 // There is no Animation switch in the panel. The site still honours
 // ?switches=animation:calm and animation:full in a link (stills the
@@ -28,13 +29,16 @@ export function SiteSwitches() {
         {null}
       </Variant>
 
-      <Variant name="accent" option="black" label="Black" swatch="#111111" default>
+      <Variant name="accent" option="system" label="System" default>
         {null}
       </Variant>
-      <Variant name="accent" option="blue" label="Blue" swatch="#2563eb">
+      <Variant name="accent" option="black" label="Black">
         {null}
       </Variant>
-      <Variant name="accent" option="orange" label="Orange" swatch="#ea580c">
+      <Variant name="accent" option="blue" label="Blue">
+        {null}
+      </Variant>
+      <Variant name="accent" option="orange" label="Orange">
         {null}
       </Variant>
     </>
