@@ -19,7 +19,9 @@ export const LICENSE_URL = "https://polyformproject.org/licenses/shield/1.0.0";
 /** Shown in the sidebar. Keep in step with packages/switches/package.json. */
 export const VERSION = "0.1.0";
 
-// GitHub links are hidden only while this is the empty string.
+// The GitHub repo must exist before the docs site is deployed (step 2 of
+// "Publishing the package" in docs/RELEASE.md), or these links 404.
+// (GitHub links are hidden only while this is the empty string.)
 export const GITHUB_URL = "https://github.com/adriimazur/switches";
 
 // TODO(launch): check this once the package is published under this name.
@@ -31,7 +33,7 @@ export const DOCS_URL = "https://mazur.design/switches";
 export const AUTHOR_NAME = "Andrii Mazur";
 export const AUTHOR_URL = "https://mazur.design";
 
-// TODO(launch): Andrii's LinkedIn profile URL. The footer hides the link while this is empty.
-export const LINKEDIN_URL = "";
+export const LINKEDIN_URL = "https://www.linkedin.com/in/andrii-mazur-design/";
+export const X_URL = "https://x.com/mazur_designs";
 
 export const INSTALL = "pnpm add switches-react && npx switches init";

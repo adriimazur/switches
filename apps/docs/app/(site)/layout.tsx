@@ -10,6 +10,7 @@ import {
   NPM_URL,
   PRODUCT_NAME,
   VERSION,
+  X_URL,
 } from "../site";
 import { Sidebar } from "./components/Sidebar";
 import { SiteSwitches } from "./components/SiteSwitches";
@@ -44,12 +45,29 @@ function GitHubIcon() {
   );
 }
 
+// mazur.design (the studio's mark) leads back to the portfolio, then the product.
+function Brand() {
+  return (
+    <div className="s-brand">
+      <a href={AUTHOR_URL} className="s-portfolio" aria-label={`${AUTHOR_NAME}: back to the portfolio`}>
+        <svg viewBox="0 0 51 24" aria-hidden focusable="false">
+          <path d="M0 0L12 5.12L24 0V24H0V0Z" fill="currentColor" />
+          <path d="M27 0H39C45.6274 0 51 5.37258 51 12C51 18.6274 45.6274 24 39 24H27V0Z" fill="currentColor" />
+        </svg>
+      </a>
+      <span className="s-brand-sep" aria-hidden>/</span>
+      <Wordmark />
+    </div>
+  );
+}
+
 export default function SiteLayout({ children }: { children: ReactNode }) {
   const footerLinks = [
     { href: GITHUB_URL, label: "GitHub" },
     { href: NPM_URL, label: "npm" },
     { href: AUTHOR_URL, label: "mazur.design" },
     { href: LINKEDIN_URL, label: "LinkedIn" },
+    { href: X_URL, label: "X" },
   ].filter((l) => l.href);
 
   const sideFoot = (
@@ -69,7 +87,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
         Skip to content
       </a>
       <div className="s-shell">
-        <Sidebar brand={<Wordmark />} foot={sideFoot} />
+        <Sidebar brand={<Brand />} foot={sideFoot} />
         <div className="s-col">
           <main id="main" className="s-prose" tabIndex={-1}>
             {children}

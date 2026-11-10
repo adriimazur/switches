@@ -20,11 +20,31 @@ import './switches-round.css'
 // pricing versions, Copy my picks) and the preview address. The page is
 // filler: what changes is its shape, not its words.
 
-type S = { hero: 0 | 1; plan: 0 | 1 | 2 }
+// hero / plan: the versions showing. note: characters of the Pricing note
+// typed so far. copied: the Copy button says "Copied". agent: the agent
+// window with the pasted picks is up; typed: characters of it typed so far.
+type S = { hero: 0 | 1; plan: 0 | 1 | 2; note: number; copied: 0 | 1; agent: 0 | 1; typed: number }
 
 // Opening frame = poster: Hero on (split), One plan picked. The poster tells
 // the story alone: a switch on, a version picked, the page showing both.
-const initial: S = { hero: 1, plan: 1 }
+const initial: S = { hero: 1, plan: 1, note: 0, copied: 0, agent: 0, typed: 0 }
+
+const NOTE = 'Keep it to one plan, no tiers.'
+
+// What "Copy my picks" puts on the clipboard (the package's real format), as
+// pasted into the agent.
+function pasteText(hero: 0 | 1, plan: 0 | 1 | 2, noteLen: number): string {
+  const h = hero ? 'split' : 'centred'
+  const p = ['tiers', 'one-plan', 'compare'][plan]!
+  const note = noteLen > 0 ? ` — note: ${NOTE}` : ''
+  return [
+    `Switches picks: hero: ${h} · pricing: ${p}`,
+    `hero: ${h} (/)`,
+    `pricing: ${p} (/)${note}`,
+    `Link: https://preview.yoursite.com/?switches=hero%3A${h}%2Cpricing%3A${p}`,
+    'Apply these picks: keep the chosen version of each section and delete the others.',
+  ].join('\n')
+}
 
 const PLANS = ['Tiers', 'One plan', 'Compare']
 
@@ -46,6 +66,34 @@ async function script(a: Act<S>) {
   await a.click({ at: 'seg-1', x: 0.86, y: 0.72 })
   await a.set({ plan: 1 })
   await a.wait(1500)
+  // Then the note, Copy my picks, and the paste into the agent.
+  const withNote = a.layout !== 'compact'
+  if (withNote) {
+    await a.wait(900)
+    a.mark('note')
+    await a.click({ at: 'note', x: 0.3, y: 0.5 })
+    for (let i = 3; i < NOTE.length + 3; i += 3) {
+      await a.set({ note: Math.min(i, NOTE.length) })
+      await a.wait(55)
+    }
+    await a.wait(600)
+  }
+  a.mark('copy')
+  await a.click({ at: 'copy', x: 0.5, y: 0.5 })
+  await a.set({ copied: 1 })
+  await a.wait(900)
+  a.mark('paste')
+  await a.set({ agent: 1 })
+  await a.wait(600)
+  const full = pasteText(1, 1, withNote ? NOTE.length : 0)
+  for (let i = 6; i < full.length + 6; i += 6) {
+    await a.set({ typed: Math.min(i, full.length) })
+    await a.wait(30)
+  }
+  await a.wait(2600)
+  await a.set({ agent: 0 })
+  await a.wait(600)
+  await a.snap({ note: 0, copied: 0, typed: 0 })
   a.mark('rest')
   await a.move({ at: 'rest' })
 }
@@ -171,6 +219,16 @@ function Page({ s }: { s: S }) {
             <div className="so-item">
               <span className="so-label">Pricing</span>
               <Segmented items={PLANS} value={s.plan} targets={['seg-0', 'seg-1', 'seg-2']} cursor="pointer" className="so-seg" data-seg="plan" />
+              <div className="so-note-slot">
+                {s.note === 0 ? (
+                  <span className="so-note-link" data-target="note" data-cursor="pointer">Add note</span>
+                ) : (
+                  <span className="so-note-input">
+                    {NOTE.slice(0, s.note)}
+                    {s.note < NOTE.length && <i className="so-caret" />}
+                  </span>
+                )}
+              </div>
             </div>
             <div className="so-item so-more">
               <span className="so-label">Mode</span>
@@ -198,10 +256,26 @@ function Page({ s }: { s: S }) {
             </div>
           </div>
         </div>
-        <span className="so-copy">
+        <span className="so-copy" data-target="copy" data-cursor="pointer">
           <Ico name="copy" />
-          <span>Copy my picks</span>
+          <span>{s.copied ? 'Copied' : 'Copy my picks'}</span>
         </span>
+      </div>
+
+      {/* The agent the picks are pasted into. */}
+      <div className="so-agent-layer" data-on={s.agent || undefined} aria-hidden>
+        <div className="so-agent">
+          <div className="so-agent-bar">
+            <i />
+            <i />
+            <i />
+            <span>Claude Code</span>
+          </div>
+          <pre className="so-agent-text">
+            {pasteText(s.hero, s.plan, s.note).slice(0, s.typed)}
+            <i className="so-caret" />
+          </pre>
+        </div>
       </div>
 
       {/* The round button, open. */}
@@ -276,10 +350,18 @@ export default function SwitchesOverview({
   const manual = paused || still
   // Pausing: the frame on screen becomes the interactive state, before paint.
   useLayoutEffect(() => {
-    if (paused) setUi(last.current)
+    if (paused) setUi({ ...last.current, agent: 0, copied: 0, typed: 0 })
   }, [paused])
   const onSheetClick = (e: MouseEvent<HTMLDivElement>) => {
     const t = e.target as HTMLElement
+    if (t.closest('.so-agent-layer')) {
+      setUi((u) => ({ ...u, agent: 0, copied: 0, typed: 0 }))
+      return
+    }
+    if (t.closest('.so-copy')) {
+      setUi((u) => ({ ...u, agent: 1, copied: 1, typed: 9999 }))
+      return
+    }
     if (t.closest('.so-switch')) {
       setUi((u) => ({ ...u, hero: u.hero ? 0 : 1 }))
       return
@@ -306,8 +388,8 @@ export default function SwitchesOverview({
         <StillContext.Provider value={calm}>
           <FullMotionContext.Provider value={full}>
             <Stage
-              width={560}
-              height={542}
+              width={680}
+              height={576}
               compact={{ below: 520, width: 358, height: 560 }}
               initial={initial}
               poster={initial}

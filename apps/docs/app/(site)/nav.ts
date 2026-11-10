@@ -24,10 +24,7 @@ export const NAV: NavGroup[] = [
     label: "Resources",
     items: [
       page("/docs/faq"),
-      // A plain link: /demo has its own root layout and look, so a full page
-      // load is right, and next/link's prefetch would preload its stylesheet
-      // here, unused (Chrome warns after a few seconds on the page).
-      { href: "/demo", title: "Demo", external: true },
+      // The sample site (/demo) is hidden for now: it still works at its address, but nothing links to it.
       ...(GITHUB_URL ? [{ href: GITHUB_URL, title: "GitHub", external: true }] : []),
     ],
   },

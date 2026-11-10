@@ -11,8 +11,8 @@ export function Wordmark() {
     <Link href="/" className="s-wordmark" aria-label={`${PRODUCT_NAME} overview`}>
       {/* The same geometry as the favicon (app/icon.svg). */}
       <svg className="s-mark" viewBox="0 0 32 32" aria-hidden focusable="false">
-        <rect className="s-mark-track" x="1" y="6" width="30" height="20" rx="10" fill="currentColor" />
-        <circle className="s-mark-knob" cx="21" cy="16" r="7" fill="var(--s-bg)" />
+        <rect className="s-mark-track" x="1" y="6" width="30" height="20" rx="10" fill="var(--s-green)" />
+        <circle className="s-mark-knob" cx="21" cy="16" r="7" fill="#ffffff" />
       </svg>
       <span>{PRODUCT_NAME}</span>
     </Link>

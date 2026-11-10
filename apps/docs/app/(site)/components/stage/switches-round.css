@@ -162,7 +162,7 @@
   position: absolute;
   top: 46px;
   left: 332px;
-  width: 212px;
+  width: 332px;
   height: 124px;
 }
 
@@ -182,8 +182,8 @@
 
 .so .so-hero-b {
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
-  gap: 16px;
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: 20px;
   align-items: center;
 }
 
@@ -212,7 +212,7 @@
   position: absolute;
   top: 192px;
   left: 332px;
-  width: 212px;
+  width: 332px;
   bottom: 0;
 }
 
@@ -451,7 +451,7 @@
 .so .so-button {
   position: absolute;
   left: 16px;
-  top: 444px;
+  top: 478px;
   display: grid;
   place-items: center;
   width: 40px;
@@ -795,5 +795,127 @@
    clicked like the real panel. */
 .so-live[data-manual] .so-switch,
 .so-live[data-manual] .ss-seg__option {
+  cursor: pointer;
+}
+
+/* ---- the note, and the agent the picks are pasted into ---- */
+
+.so .so-note-slot {
+  height: 34px;
+}
+
+.so .so-note-link {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--so-muted);
+}
+
+.so .so-note-input {
+  display: block;
+  margin-top: 8px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--so-ink) 8%, transparent);
+  font-size: 12.5px;
+  line-height: 26px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.so .so-caret {
+  display: inline-block;
+  width: 5px;
+  height: 11px;
+  margin-left: 1px;
+  vertical-align: -1px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.so .so-agent-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.so .so-agent-layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--ss-surface) 74%, transparent);
+}
+
+.so .so-agent-layer[data-on] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.so .so-agent {
+  position: absolute;
+  left: 120px;
+  right: 40px;
+  top: 64px;
+  border-radius: 12px;
+  background: var(--ss-surface);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.18), 0 0 0 1px var(--ss-line-strong, #d9d9d6);
+  overflow: hidden;
+}
+
+.so .so-agent-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--ss-line);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--so-ink);
+}
+
+.so .so-agent-bar i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ss-line-strong, #d9d9d6);
+}
+
+.so .so-agent-bar span {
+  margin-left: 6px;
+}
+
+.so .so-agent-text {
+  margin: 0;
+  padding: 14px 16px 18px;
+  min-height: 190px;
+  font-family: var(--s-font-mono, ui-monospace), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--so-ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* The phone draws the sheet without the note and the agent over the whole screen */
+.so .so-phone .so-note-slot {
+  display: none;
+}
+
+.so .so-phone .so-agent {
+  left: 14px;
+  right: 14px;
+  top: 150px;
+}
+
+.so .so-phone .so-agent-text {
+  font-size: 13px;
+  min-height: 220px;
+}
+
+.so-live[data-manual] .so-copy {
   cursor: pointer;
 }

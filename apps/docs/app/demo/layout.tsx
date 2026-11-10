@@ -1,8 +1,14 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "./demo.css";
 
 // Fernpost is a made-up product: the sample site the Switches demo runs on.
+// It is hidden for now: nothing on the docs site links to it and search
+// engines are told to skip it. It still works at /demo (the end-to-end tests
+// use it).
+export const metadata: Metadata = { robots: { index: false, follow: false } };
+
 export default function DemoLayout({ children }: { children: ReactNode }) {
   return (
     <div className="fp">

@@ -53,8 +53,10 @@ html:has(> body > .site):is([data-switches-picks="mode:dark"], [data-switches-pi
   --s-mark: light-dark(#2f6fec, #3b78f0);
   --s-accent: light-dark(#34c759, #30d158);
   --s-on-accent: #06260f;
+  /* The brand green of the wordmark and the favicon */
+  --s-green: #34c759;
   --s-radius: 10px;
-  --s-col: 560px;
+  --s-col: 680px;
   --s-side: 196px;
   --s-gutter: 16px;
 
@@ -228,6 +230,34 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.s-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.site .s-portfolio {
+  display: inline-flex;
+  color: var(--s-ink);
+  opacity: 0.9;
+}
+
+.site .s-portfolio:hover {
+  opacity: 1;
+}
+
+.s-portfolio svg {
+  display: block;
+  width: 32px;
+  height: 15px;
+}
+
+.s-brand-sep {
+  color: var(--s-line-strong);
+  font-size: 18px;
+  line-height: 1;
 }
 
 .s-wordmark {
@@ -571,8 +601,20 @@ html:is([data-switches-picks="animation:calm"], [data-switches-picks^="animation
   stroke-linejoin: round;
 }
 
+/* The "Copied" note sits beside the button without taking any room, so
+   copying never moves the page (the install line stays one line tall). */
+.s-copy-icon {
+  position: relative;
+}
+
 .s-copy-done {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  translate: 0 -50%;
+  margin-left: 2px;
   font-size: 12px;
+  white-space: nowrap;
   color: var(--s-muted);
 }
 

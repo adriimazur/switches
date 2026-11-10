@@ -119,7 +119,7 @@ export default function Overview() {
         {/* Plain <a>: a full page load, so the pick applies before first paint. */}
         <ScrollLink href={withBase("/?switches=layout:photo")} to="try">Photo split</ScrollLink> or{" "}
         <ScrollLink href={withBase("/?switches=layout:classes")} to="try">Class list</ScrollLink> already
-        picked, or open the <a href={withBase("/demo")}>sample site</a>.
+        picked.
       </p>
 
       <h2 id="install">Install</h2>
